@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "my-nextron-app",
-  "description": "My application description",
+  "name": "nextron-chat",
+  "description": "chatting program using nextron.js",
   "version": "1.0.0",
-  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "author": "minjeong <minjeong.dev@gmail.com>",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",
@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "firebase": "^9.16.0"
   },
   "devDependencies": {
     "@emotion/cache": "^11.10.3",

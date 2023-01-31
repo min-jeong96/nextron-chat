@@ -4,7 +4,7 @@
 - [x] TypeScript
 - [x] React
 - [x] Nextron.js
-- [ ] Firebase
+- [x] Firebase
 - [x] git
 
 ## 프로젝트 구현 기능
