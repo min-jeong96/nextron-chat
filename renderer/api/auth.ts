@@ -12,7 +12,7 @@ export async function signUp(id, password) {
   if (docSnap.exists()) {
     throw Error('이미 존재하는 아이디입니다.');
   } else {
-    await setDoc(docRef, { password });
+    await setDoc(docRef, { password, chat: [] });
   }
 
   return true;

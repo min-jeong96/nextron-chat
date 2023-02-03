@@ -71,12 +71,19 @@ export default function MyApp(props: AppProps) {
           className='bottom-navigation'
           showLabels
           value={value}
-          onChange={(event, newValue) => setValue(newValue)} >
+          onChange={(event, newValue) => changeTab(newValue)} >
           <BottomNavigationAction label='users' icon={<PeopleAltIcon />} />
           <BottomNavigationAction label='chattings' icon={<ChatIcon />} />
         </BottomNavigation>
       );
     }
+  }
+
+  function changeTab(newValue) {
+    setValue(newValue);
+
+    const url = ['/users', 'chat'][newValue];
+    router.push(url);
   }
 
   async function login(id, password) {
