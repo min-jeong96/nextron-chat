@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { getFirestore } from "firebase/firestore";
-import { doc, getDoc, collection, query, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, getDoc, collection, query, onSnapshot, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { app } from './firebase';
 
 const firestore = getFirestore(app);
@@ -72,6 +72,30 @@ export async function sendMessage(id, userId, message) {
       sender: userId,
       message: message
     });
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+/**
+ * 새로운 채팅방 만드는 API
+ * @param {string[]} users 채팅방 참여 사용자 아이디
+ * @returns {boolean} 생성 성공 여부
+ */
+export async function openNewChattingRoom(users) {
+  const roomId = Date.now().toString();
+  
+  try {
+    await setDoc(doc(firestore, 'chat', roomId), { users });
+    // await setDoc(doc(firestore, 'chat', roomId, 'messages', 'test'), { });
+    
+    for (let user of users) {
+      await updateDoc(doc(firestore, 'auth', user), {
+        chat: arrayUnion(roomId)
+      });
+    }
     return true;
   } catch (error) {
     console.error(error);
