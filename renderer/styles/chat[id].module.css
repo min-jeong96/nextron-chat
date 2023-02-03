@@ -9,6 +9,7 @@
 .messages {
   height: inherit;
   padding: 12px 0;
+  overflow-y: scroll;
 }
 
 .message {

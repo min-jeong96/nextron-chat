@@ -2,14 +2,16 @@ import styles from '../../styles/chat[id].module.css';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { getChatStream } from '../../api/chat';
+import { getChatStream, sendMessage } from '../../api/chat';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 export default function ChattingRoomPage(props) {
   const router = useRouter();
+
   const [messages, setMessages] = useState([]);
+  const [inputText, setInputText] = useState('');
 
   useEffect(() => {
     if (!props.user) {
@@ -51,13 +53,30 @@ export default function ChattingRoomPage(props) {
         <TextField
           className={styles.input}
           multiline
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
           rows={4} />
-        <Button variant='contained'>전송</Button>
+        <Button
+          variant='contained'
+          disabled={!inputText}
+          onClick={() => send()} >
+          전송
+        </Button>
       </div>
     </div>
   );
 
   function getMessageClassName(message) {
     return props.user && props.user.id === message.sender ? styles.send : styles.receive;
+  }
+
+  async function send() {
+    const isSended = await sendMessage(router.query.id, props.user.id, inputText);
+    
+    if (!isSended) {
+      alert('Message Send Error');
+    } else {
+      setInputText('');
+    }
   }
 }

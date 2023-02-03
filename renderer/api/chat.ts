@@ -1,10 +1,15 @@
 // Import the functions you need from the SDKs you need
 import { getFirestore } from "firebase/firestore";
-import { doc, getDoc, collection, query, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, collection, query, onSnapshot, setDoc } from "firebase/firestore";
 import { app } from './firebase';
 
 const firestore = getFirestore(app);
 
+/**
+ * 로그인한 사용자의 채팅방 목록 가져오는 API
+ * @param {string} id 사용자의 아이디
+ * @returns {objects[]} 각 채팅방의 id와 참여자 아이디 목록
+ */
 export async function getChattingRooms(id) {
   if (!id) {
     throw Error('로그인 오류');
@@ -32,6 +37,12 @@ export async function getChattingRooms(id) {
   return rooms;
 }
 
+/**
+ * 특정 채팅방의 메시지 컬렉션 데이터 구독하는 API
+ * @param {string} id 채팅방 아이디
+ * @param {function} setMessages useState()
+ * @returns {function} Unsubscribe
+ */
 export function getChatStream(id, setMessages) {
   const q = query(collection(firestore, 'chat', id, 'messages'));
   return onSnapshot(q, (snapshot) => {
@@ -44,4 +55,26 @@ export function getChatStream(id, setMessages) {
     });
     setMessages(messages);
   })
+}
+
+/**
+ * 특정 채팅방에 메시지 전송하는 API
+ * @param {string} id 채팅방 아이디
+ * @param {string} userId 메시지 전송자 아이디
+ * @param {string} message 메시지 내용
+ * @returns {boolean} 전송 성공 여부
+ */
+export async function sendMessage(id, userId, message) {
+  const timestamp = Date.now().toString();
+  
+  try {
+    await setDoc(doc(firestore, 'chat', id, 'messages', timestamp), {
+      sender: userId,
+      message: message
+    });
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }
