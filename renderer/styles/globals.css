@@ -14,7 +14,7 @@ body {
 
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   position: fixed;
   top: 0;
@@ -22,7 +22,9 @@ body {
   height: 40px;
   border-bottom: 1px solid var(--shadow-color);
 }
-
+.header > .id {
+  margin: 0 0 0 20px;
+}
 .header > .login,
 .header > .logout {
   margin: 0 20px 0 0;
@@ -34,9 +36,4 @@ body {
   bottom: 0;
   width: 100%;
   border-top: 1px solid var(--shadow-color);
-}
-
-.container {
-  height: calc(100% - 96px);
-  padding: 40px 20px 56px;
 }

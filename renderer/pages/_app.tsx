@@ -4,13 +4,14 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import type {AppProps} from 'next/app';
-import Link from '../components/Link';
 
 import { signIn } from '../api/auth';
 
 import Button from '@mui/material/Button';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ChatIcon from '@mui/icons-material/Chat';
 
 export default function MyApp(props: AppProps) {
   const {Component, pageProps} = props;
@@ -35,6 +36,7 @@ export default function MyApp(props: AppProps) {
     if (user) {
       return (
         <div className='header'>
+          <div className='id'>{user.id}</div>
           <Button
             className='logout'
             variant='text'
@@ -46,6 +48,7 @@ export default function MyApp(props: AppProps) {
     } else {
       return (
         <div className='header'>
+          <div className='id'></div>
           <Button
             className='login'
             variant='text'
@@ -69,8 +72,8 @@ export default function MyApp(props: AppProps) {
           showLabels
           value={value}
           onChange={(event, newValue) => setValue(newValue)} >
-          <BottomNavigationAction label='users' />
-          <BottomNavigationAction label='chattings' />
+          <BottomNavigationAction label='users' icon={<PeopleAltIcon />} />
+          <BottomNavigationAction label='chattings' icon={<ChatIcon />} />
         </BottomNavigation>
       );
     }
