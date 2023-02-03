@@ -8,7 +8,6 @@ import Button from '@mui/material/Button';
 export default function LoginPage(props) {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  console.log(props);
 
   return (
     <div className={styles.container}>
