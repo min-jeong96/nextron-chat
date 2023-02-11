@@ -7,11 +7,8 @@ import type {AppProps} from 'next/app';
 
 import { signIn } from '../api/auth';
 
-import Button from '@mui/material/Button';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import ChatIcon from '@mui/icons-material/Chat';
+import Header from '../components/ui/header';
+import Navigation from '../components/ui/navigation';
 
 export default function MyApp(props: AppProps) {
   const {Component, pageProps} = props;
@@ -26,78 +23,21 @@ export default function MyApp(props: AppProps) {
         <title>Nextron-Chat</title>
         <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width'/>
       </Head>
-      <Header />
+      <Header user={user} login={login} logout={logout} />
       <Component {...pageProps} user={user} login={login} logout={logout} />
-      <Navigation />
+      <Navigation value={value} setValue={setValue}/>
     </>
   )
 
-  function Header() {
-    if (user) {
-      return (
-        <div className='header'>
-          <div className='id'>{user.id}</div>
-          <Button
-            className='logout'
-            variant='text'
-            onClick={() => logout()} >
-            로그아웃
-          </Button>
-        </div>
-      );
-    } else {
-      return (
-        <div className='header'>
-          <div className='id'></div>
-          <Button
-            className='login'
-            variant='text'
-            href='/login' >
-            로그인
-          </Button>
-        </div>
-      );
-    }
-  }
-
-  function Navigation() {
-    if (['/login', '/signup'].includes(router.pathname)) {
-      return (
-        <></>
-      );
-    } else {
-      return (
-        <BottomNavigation
-          className='bottom-navigation'
-          showLabels
-          value={value}
-          onChange={(event, newValue) => changeTab(newValue)} >
-          <BottomNavigationAction label='users' icon={<PeopleAltIcon />} />
-          <BottomNavigationAction label='chattings' icon={<ChatIcon />} />
-        </BottomNavigation>
-      );
-    }
-  }
-
-  function changeTab(newValue) {
-    setValue(newValue);
-
-    const url = ['/users', 'chat'][newValue];
-    router.push(url);
-  }
-
   async function login(id, password) {
-    let user;
-
     try {
-      user = await signIn(id, password);
+      let userData = await signIn(id, password);
+      setUser(userData);
+      router.push('/users');
     } catch (error) {
       alert(error.message);
       return;
     }
-
-    setUser(user);
-    router.push('/users');
   }
 
   function logout() {
